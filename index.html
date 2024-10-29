@@ -10,61 +10,87 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #0f172a;
-            color: #e2e8f0;
+            background-color: #000000;
+            color: #4ade80;
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
+            overflow: hidden;
         }
-
+        
         .container {
             padding: 2rem;
             max-width: 600px;
+            position: relative;
+            z-index: 2;
         }
-
+        
         h1 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
-            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            background: linear-gradient(to right, #4ade80, #22c55e);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            text-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
         }
-
+        
         p {
             font-size: 1.25rem;
             margin-bottom: 2rem;
-            color: #94a3b8;
+            color: #86efac;
         }
-
+        
         .x-button {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background-color: #000000;
-            color: white;
+            background-color: #064e3b;
+            color: #4ade80;
             padding: 0.75rem 1.5rem;
             border-radius: 9999px;
             text-decoration: none;
             font-weight: 500;
             transition: all 0.2s;
-            border: 1px solid #333;
+            border: 1px solid #059669;
+            box-shadow: 0 0 10px rgba(74, 222, 128, 0.2);
         }
-
+        
         .x-button:hover {
-            background-color: #111111;
-            border-color: #444;
+            background-color: #065f46;
+            border-color: #4ade80;
+            box-shadow: 0 0 15px rgba(74, 222, 128, 0.4);
         }
-
+        
         .x-icon {
             width: 20px;
             height: 20px;
             fill: currentColor;
+        }
+
+        .money {
+            position: fixed;
+            color: #4ade80;
+            opacity: 0.3;
+            font-size: 24px;
+            pointer-events: none;
+            z-index: 1;
+            animation: fall linear infinite;
+            text-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+        }
+
+        @keyframes fall {
+            from {
+                transform: translateY(-20px);
+            }
+            to {
+                transform: translateY(100vh);
+            }
         }
     </style>
 </head>
@@ -72,12 +98,48 @@
     <div class="container">
         <h1>mysweeps.xyz</h1>
         <p>dev is working on something</p>
-        <a href="https://x.com/mysweepsxyz" class="x-button" target="_blank">
+        <a href="https://x.com/mysweepsxyz" class="x-button" target="_blank" rel="noopener noreferrer">
             <svg class="x-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
             </svg>
             Follow on X
         </a>
     </div>
+
+    <script>
+        function createMoneySymbol() {
+            const symbols = ['$', '€', '£', '¥'];
+            const money = document.createElement('div');
+            money.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            money.className = 'money';
+            
+            // Random starting position
+            const startPosition = Math.random() * window.innerWidth;
+            money.style.left = `${startPosition}px`;
+            
+            // Random animation duration between 5 and 10 seconds
+            const duration = 5 + Math.random() * 5;
+            money.style.animationDuration = `${duration}s`;
+            
+            // Random rotation
+            const rotation = Math.random() * 360;
+            money.style.transform += ` rotate(${rotation}deg)`;
+            
+            document.body.appendChild(money);
+            
+            // Remove the element after animation completes
+            setTimeout(() => {
+                money.remove();
+            }, duration * 1000);
+        }
+
+        // Create initial set of money symbols
+        for (let i = 0; i < 20; i++) {
+            setTimeout(createMoneySymbol, Math.random() * 5000);
+        }
+
+        // Continuously create new money symbols
+        setInterval(createMoneySymbol, 1000);
+    </script>
 </body>
 </html>
