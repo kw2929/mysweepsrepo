@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta and Title -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mysweeps.xyz | Coming Soon</title>
+
+    <!-- Styles -->
     <style>
+        /* Reset and Box-sizing */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         
+        /* Body Styling */
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: #000000;
@@ -23,6 +28,7 @@
             overflow: hidden;
         }
         
+        /* Container */
         .container {
             padding: 2rem;
             max-width: 600px;
@@ -30,6 +36,7 @@
             z-index: 2;
         }
         
+        /* Heading */
         h1 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
@@ -40,12 +47,14 @@
             text-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
         }
         
+        /* Paragraph */
         p {
             font-size: 1.25rem;
             margin-bottom: 2rem;
             color: #86efac;
         }
         
+        /* Button Styling */
         .x-button {
             display: inline-flex;
             align-items: center;
@@ -61,18 +70,21 @@
             box-shadow: 0 0 10px rgba(74, 222, 128, 0.2);
         }
         
+        /* Button Hover Effect */
         .x-button:hover {
             background-color: #065f46;
             border-color: #4ade80;
             box-shadow: 0 0 15px rgba(74, 222, 128, 0.4);
         }
         
+        /* Icon Styling */
         .x-icon {
             width: 20px;
             height: 20px;
             fill: currentColor;
         }
 
+        /* Falling Money Symbols */
         .money {
             position: fixed;
             color: #4ade80;
@@ -92,9 +104,22 @@
                 transform: translateY(100vh);
             }
         }
+
+        /* Money Symbols Following Mouse */
+        .money-trail {
+            position: absolute;
+            color: #4ade80;
+            font-size: 24px;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 1;
+            transition: all 1s linear;
+            text-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+        }
     </style>
 </head>
 <body>
+    <!-- Main Content -->
     <div class="container">
         <h1>mysweeps.xyz</h1>
         <p>dev is working on something</p>
@@ -106,7 +131,9 @@
         </a>
     </div>
 
+    <!-- Scripts -->
     <script>
+        // Function to create falling money symbols
         function createMoneySymbol() {
             const symbols = ['$', '€', '£', '¥'];
             const money = document.createElement('div');
@@ -140,6 +167,57 @@
 
         // Continuously create new money symbols
         setInterval(createMoneySymbol, 1000);
+
+        // Variables to keep track of last symbol position
+        let lastX = null;
+        let lastY = null;
+        const minDistance = 50; // Adjust this value to change spacing
+
+        // Function to create money symbols at the mouse position
+        function createMoneySymbolAt(x, y) {
+            const symbols = ['$', '€', '£', '¥'];
+            const money = document.createElement('div');
+            money.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            money.className = 'money-trail';
+
+            money.style.left = `${x}px`;
+            money.style.top = `${y}px`;
+
+            // Center the symbol
+            money.style.transform = `translate(-50%, -50%)`;
+
+            document.body.appendChild(money);
+
+            // Animate fade out and upward movement
+            setTimeout(() => {
+                money.style.opacity = '0';
+                money.style.transform = `translate(-50%, -50%) translateY(-20px)`;
+            }, 0);
+
+            // Remove the element after animation completes
+            setTimeout(() => {
+                money.remove();
+            }, 1000);
+        }
+
+        // Event listener for mouse movement based on distance
+        document.addEventListener('mousemove', function(e) {
+            if (lastX === null || lastY === null) {
+                // First time moving the mouse
+                createMoneySymbolAt(e.clientX, e.clientY);
+                lastX = e.clientX;
+                lastY = e.clientY;
+            } else {
+                const deltaX = e.clientX - lastX;
+                const deltaY = e.clientY - lastY;
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                if (distance >= minDistance) {
+                    createMoneySymbolAt(e.clientX, e.clientY);
+                    lastX = e.clientX;
+                    lastY = e.clientY;
+                }
+            }
+        });
     </script>
 </body>
 </html>
